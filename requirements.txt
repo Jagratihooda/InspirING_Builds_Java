@@ -12,4 +12,5 @@ six>=1.4.0
 backports.ssl-match-hostname>=3.5
 websocket-client>=0.32.0
 ecdsa>=0.11
-markupsafe
+markupsafe---
+

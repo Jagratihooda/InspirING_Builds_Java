@@ -2,7 +2,7 @@
 
 - hosts: all
   become: yes
-  gather_facts: yes
+  gather_facts: yes 
   vars:
     users: 1
     slaves: 1

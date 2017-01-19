@@ -5,6 +5,7 @@
   "jdk": "oraclejdk8",
   "script": [
     "mvn install"
+"mvn package -Dmaven.test.skip=true"
   ],
   "os": "linux"
 }

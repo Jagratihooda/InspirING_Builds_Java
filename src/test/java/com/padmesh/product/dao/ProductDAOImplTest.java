@@ -11,7 +11,7 @@ import com.padmesh.product.dto.Product;
 public class ProductDAOImplTest {
 
 	@Test
-	public void createShouldCreateAProduct() {
+	public static void main(String[] args) {
 
   ProductDAO dao = new ProductDAOImpl();
   Product product = new Product();
@@ -26,7 +26,13 @@ public class ProductDAOImplTest {
 //assertNotNull(result);
 //assertEquals("Iphone",result.getName());
   
-	Class c = Class.forName("com.padmesh.product.dto.Product");
+	Class c=null;;
+	try {
+		c = Class.forName("com.padmesh.product.dto.Product");
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
        // System.out.println("Fields =");
 
         // returns the array of Field objects representing the public fields
@@ -40,11 +46,12 @@ public class ProductDAOImplTest {
         //}
 
  boolean flag=false;
+ int i;
   System.out.println(c.getName());  
   Field[] S=c.getFields();
   S=c.getDeclaredFields();
   System.out.print(S.length);  
-  for(int i=0;i<=S.length-1;i++){
+  for( i=0;i<=S.length-1;i++){
 	  System.out.println(S[i]);  
 	String y=  S[i].toString();
 	if(y.contains("ING_")){
@@ -54,7 +61,7 @@ public class ProductDAOImplTest {
 	  System.out.println(flag);  
 
 	}
-assertNotNull(S[i]);
+//assertNotNull(S[i]);
 assertEquals(true,flag);
 }
 }

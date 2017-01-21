@@ -19,11 +19,26 @@ public class ProductDAOImplTest {
   product.setPrice(800);
   dao.create(new Product());
   
-  dao.create(product);
-  Product result = dao.read(1);
-assertNotNull(result);
-assertEquals("Iphone",result.getName());
+//  dao.create(product);
+  //Product result = dao.read(1);
+//assertNotNull(result);
+//assertEquals("Iphone",result.getName());
   
+	Class cls = Class.forName("com.padmesh.product.dto.Product");
+       // System.out.println("Fields =");
+
+        // returns the array of Field objects representing the public fields
+        Field f[] = cls.getFields();
+        for (int i = 0; i < f.length; i++) {
+//           System.out.println(f[i]);
+
+		assertNotNull(f(i));
+		assertEquals("ING_",f(i).substring(0,3));
+
+        }
+
+
+
 	}
 
 }

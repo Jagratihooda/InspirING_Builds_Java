@@ -52,8 +52,9 @@ public class ProductDAOImplTest {
 	}
 	y=S[i].toString();
 	  System.out.println(flag);  
-assertNotNull(f[i]);
-assertEquals(true,flag);
+
 	}
+assertNotNull(S[i]);
+assertEquals(true,flag);
 }
 }

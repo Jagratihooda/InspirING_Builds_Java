@@ -26,21 +26,34 @@ public class ProductDAOImplTest {
 //assertNotNull(result);
 //assertEquals("Iphone",result.getName());
   
-	Class cls = Class.forName("com.padmesh.product.dto.Product");
+	Class c = Class.forName("com.padmesh.product.dto.Product");
        // System.out.println("Fields =");
 
         // returns the array of Field objects representing the public fields
-        Field f[] = cls.getFields();
-        for (int i = 0; i < f.length; i++) {
+       // Field f[] = cls.getFields();
+       // for (int i = 0; i < f.length; i++) {
 //           System.out.println(f[i]);
 
-		assertNotNull(f(i));
-		assertEquals("ING_",f(i).substring(0,3));
+		//assertNotNull(f(i));
+		//assertEquals("ING_",f(i).substring(0,3));
 
-        }
+        //}
 
-
-
+ boolean flag=false;
+  System.out.println(c.getName());  
+  Field[] S=c.getFields();
+  S=c.getDeclaredFields();
+  System.out.print(S.length);  
+  for(int i=0;i<=S.length-1;i++){
+	  System.out.println(S[i]);  
+	String y=  S[i].toString();
+	if(y.contains("ING_")){
+		flag=true;
 	}
-
+	y=S[i].toString();
+	  System.out.println(flag);  
+assertNotNull(f[i]);
+assertEquals(true,flag);
+	}
+}
 }

@@ -11,7 +11,7 @@ import com.padmesh.product.dto.Product;
 public class ProductDAOImplTest {
 
 	@Test
-	public static void main(String[] args) {
+	public void createShouldCreateAProduct() {
 
   ProductDAO dao = new ProductDAOImpl();
   Product product = new Product();

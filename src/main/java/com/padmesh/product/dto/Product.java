@@ -1,10 +1,10 @@
 package com.padmesh.product.dto;
 
 public class Product {
-	private int id;
-	private String name;
-	private String description;
-	private int price;
+	private int ING_id;
+	private String ING_name;
+	private String ING_description;
+	private int ING_price;
 	public int getId() {
 		return id;
 	}

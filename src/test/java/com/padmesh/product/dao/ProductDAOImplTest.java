@@ -28,7 +28,7 @@ public class ProductDAOImplTest {
   
 	Class c=null;;
 	try {
-		c = Class.forName("com.padmesh.product.dto.Product1”);
+		c = Class.forName("com.padmesh.product.dto.Product1");
 	} catch (ClassNotFoundException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

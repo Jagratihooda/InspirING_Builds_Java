@@ -52,11 +52,15 @@ public class ProductDAOImplTest {
   S=c.getDeclaredFields();
   System.out.print(S.length);  
   for( i=0;i<=S.length-1;i++){
-	  System.out.println(S[i]);  
+	System.out.println(S[i]);  
 	String y=  S[i].toString();
 	if(y.contains("ING_")){
 		flag=true;
+	}else{
+		flag=false;
+		break;
 	}
+
 	y=S[i].toString();
 	  System.out.println(flag);  
 

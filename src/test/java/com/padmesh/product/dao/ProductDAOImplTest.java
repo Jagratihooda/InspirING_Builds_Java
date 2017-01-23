@@ -58,11 +58,12 @@ public class ProductDAOImplTest {
 		flag=true;
 	}else{
 		flag=false;
+		System.out.println("Variable name "+y+ " should start with 'ING_' ");  		
 		break;
 	}
 
 	y=S[i].toString();
-	  System.out.println(flag);  
+	  //System.out.println(flag);  
 
 	}
 //assertNotNull(S[i]);

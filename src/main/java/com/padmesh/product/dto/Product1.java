@@ -3,7 +3,7 @@ package com.padmesh.product.dto;
 public class Product1 {
 	
 	private int ING_Id;
-	private String First_Name;
+	private String ING_First_Name;
 	private String ING_Last_Name;
 	private int ING_Age;
 	private String ING_Address; 

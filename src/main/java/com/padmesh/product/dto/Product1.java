@@ -7,7 +7,7 @@ public class Product1 {
 	private String ING_Last_Name;
 	private int ING_Age;
 	private String ING_Address; 
-	private String ING_Spouse_Name;
+	private String Spouse_Name;
 	private String ING_Gender;
 	private String ING_Mobile_Number;
 

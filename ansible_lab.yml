@@ -1,0 +1,161 @@
+#!/usr/bin/env ansible-playbook
+
+- hosts: all
+  become: yes
+  gather_facts: yes
+  vars:
+    users: 1
+    slaves: 1
+    cidr: "172.18.1.1/20"
+
+  tasks:
+    - name: Baseline Machine
+      yum: name={{ item }} state=present
+      with_items:
+        - docker
+        - python-pip
+        - python-docker-py
+      tags:
+        - baseline
+
+    - name: Start Docker Engine
+      service: name=docker state=started
+      tags:
+        - baseline
+
+    - name: Backup existing SSH config
+      copy: src=/etc/ssh/ssh_config dest=/etc/ssh/ssh_config_backup
+      tags:
+        - ssh
+        - backup_ssh
+        - baseline
+
+    - name: Create group for lab users
+      group:
+           name=ansiblelab
+           state=present
+      tags:
+        - group
+        - baseline
+
+    - name: Create user, home with default password, ssh keys - loop
+      user:
+          name={{ item }}
+          comment={{ item }}
+          password={{ item | password_hash('sha512') }}
+          home=/home/{{ item }}
+          group=ansiblelab
+          generate_ssh_key=yes
+          ssh_key_file=.ssh/id_rsa
+          update_password=always
+          state=present
+      with_sequence: start=1 end={{ users }} format=ansiblelabuser%d
+      tags:
+        - users
+        - baseline
+
+    - name: unlock sshd_config
+      command: chattr -i /etc/ssh/sshd_config
+      changed_when: yes
+      tags:
+        - ssh
+        - users
+        - baseline
+
+    - name: insert ansible in sshd allowedusers
+      replace:
+        dest: /etc/ssh/sshd_config
+        regexp: '^(AllowUsers(?!.*\b{{ item }}\b).*)$'
+        replace: '\1 {{ item }}'
+      with_sequence: start=1 end={{ users }} format=ansiblelabuser%d
+      tags:
+        - ssh
+        - users
+        - baseline
+
+    - name: lock sshd_config
+      command: chattr +i /etc/ssh/sshd_config
+      changed_when: yes
+      tags:
+        - ssh
+        - users
+        - baseline
+
+    - name: Create Docker network for ansiblelab (limiting to 4K containers approx)
+      command: docker network create -d bridge --internal --subnet={{ cidr }} ansiblelab_nw
+      tags:
+        - docker_network
+
+    - name: Build Master and Slave Images (Module)
+      docker_image:
+        path: "{{ item }}"
+        dockerfile: Dockerfile
+        state: present
+        name: ansible_lab/{{ item }}
+        tag: latest
+      with_items:
+        - master
+        - slave
+      tags:
+        - m_startup
+        - m_build_images
+
+    - name: Build Master and Slave Images (CLI)
+      command: docker build -t ansible_lab/{{ item }}:latest {{ item }}
+      with_items:
+        - master
+        - slave
+      tags:
+        - cli_startup
+        - cli_build_images
+
+    - include: ansible_lab_master_slave.yml
+      with_sequence: start=1 end={{ users }}
+      loop_control:
+        loop_var: master_name
+
+    - name: Remove ansible lab users
+      user:
+        name={{ item }}
+        state=absent
+        force=yes
+        remove=yes
+      with_sequence: start=1 end={{ users }} format=ansiblelabuser%d
+      tags:
+        - remove_users
+        - remove_baseline
+
+    - name: Remove ansible lab user group
+      group:
+        name=ansiblelab
+        state=absent
+      tags:
+        - remove_group
+        - remove_baseline
+
+    - name: Unlock sshd_config
+      command: chattr -i /etc/ssh/sshd_config
+      changed_when: yes
+      tags:
+        - revert_ssh
+        - remove_users
+        - remove_baseline
+
+    - name: Delete ansible lab users from sshd allowedusers
+      replace:
+        dest: /etc/ssh/sshd_config
+        regexp: '{{ item }}\s?\b'
+        replace: ''
+      with_sequence: start=1 end={{ users }} format=ansiblelabuser%d
+      tags:
+        - revert_ssh
+        - remove_users
+        - remove_baseline
+
+    - name: Lock sshd_config
+      command: chattr +i /etc/ssh/sshd_config
+      changed_when: yes
+      tags:
+        - revert_ssh
+        - remove_users
+        - remove_baseline

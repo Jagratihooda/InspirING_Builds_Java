@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
   "language": "java",
   "group": "stable",
@@ -10,29 +9,3 @@
 ],
   "os": "linux"
 }
-=======
----
-language: python
-python: "2.7"
-
-sudo: false
-
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-
-install:
-  # Install ansible & ansible-lint
-  - pip install ansible
-  - pip install ansible-lint
-    
-  # Check ansible version
-  - ansible --version
-
-script:
-  # Basic role syntax check
-  - ansible-playbook ansible_lab.yml --syntax-check
-  - ansible-lint -x ANSIBLE0012 ansible_lab.yml
->>>>>>> b2fd1d3bf7f1840de77777aede99b5d85b629d9d
